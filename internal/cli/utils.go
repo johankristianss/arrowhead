@@ -86,7 +86,7 @@ func generateCert(systemName string) (string, error) {
 	err = certManager.CreateSystemKeystore(
 		RootKeystorePath, RootKeystoreAlias,
 		CloudKeystorePath, CloudKeystoreAlias,
-		systemName+".p12", systemName+".cloud1.ltu.arrowhead.eu",
+		systemName+".p12", systemName+"."+CloudKeystoreAlias,
 		systemName, security.GenerateSubjectAlternativeName(systemName), KeystorePassword,
 	)
 	if err != nil {

@@ -16,8 +16,8 @@ func TestSecurityOpenSSLCreateSystemKeystore(t *testing.T) {
 	certManager := CreateOpenSSLCertManager()
 	err := certManager.CreateSystemKeystore(
 		"../testcerts/master.p12", "arrowhead.eu",
-		"../testcerts/cloud1.p12", "cloud1.ltu.arrowhead.eu",
-		"./cardemoconsumer.p12", "cardemoconsumer.cloud1.ltu.arrowhead.eu",
+		"../testcerts/c1.p12", "c1.ltu.arrowhead.eu",
+		"./cardemoconsumer.p12", "cardemoconsumer.c1.ltu.arrowhead.eu",
 		"cardemoconsumer", san, "123456",
 	)
 
@@ -36,8 +36,8 @@ func TestSecurityOpenSSLGetPublicKey(t *testing.T) {
 	certManager := CreateOpenSSLCertManager()
 	err := certManager.CreateSystemKeystore(
 		"../testcerts/master.p12", "arrowhead.eu",
-		"../testcerts/cloud1.p12", "cloud1.ltu.arrowhead.eu",
-		"./cardemoconsumer.p12", "cardemoconsumer.cloud1.ltu.arrowhead.eu",
+		"../testcerts/c1.p12", "c1.ltu.arrowhead.eu",
+		"./cardemoconsumer.p12", "cardemoconsumer.c1.ltu.arrowhead.eu",
 		"cardemoconsumer", san, "123456",
 	)
 
@@ -62,8 +62,8 @@ func TestSecurityOpenSSLConvertP12ToPEM(t *testing.T) {
 	certManager := CreateOpenSSLCertManager()
 	err := certManager.CreateSystemKeystore(
 		"../testcerts/master.p12", "arrowhead.eu",
-		"../testcerts/cloud1.p12", "cloud1.ltu.arrowhead.eu",
-		"./cardemoconsumer.p12", "cardemoconsumer.cloud1.ltu.arrowhead.eu",
+		"../testcerts/c1.p12", "c1.ltu.arrowhead.eu",
+		"./cardemoconsumer.p12", "cardemoconsumer.c1.ltu.arrowhead.eu",
 		"cardemoconsumer", san, "123456",
 	)
 

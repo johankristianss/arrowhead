@@ -16,8 +16,8 @@ func TestMain(m *testing.M) {
 		ServiceRegistryPort: 8443,
 		OrchestratorHost:    "localhost",
 		OrchestratorPort:    8441,
-		KeystorePath:        "certs/sysop.p12",
-		TruststorePath:      "certs/truststore.pem",
+		KeystorePath:        "../security/testcerts/sysop.p12",
+		TruststorePath:      "../security/testcerts/truststore.pem",
 		Password:            "123456",
 	}
 

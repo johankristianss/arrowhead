@@ -16,8 +16,8 @@ func TestSecurityKeytoolCreateSystemKeystore(t *testing.T) {
 	certManager := CreateKeytoolCertManager()
 	err := certManager.CreateSystemKeystore(
 		"../testcerts/master.p12", "arrowhead.eu",
-		"../testcerts/cloud1.p12", "cloud1.ltu.arrowhead.eu",
-		"./cardemoconsumer.p12", "cardemoconsumer.cloud1.ltu.arrowhead.eu", "cardemoconsumer", san, "123456",
+		"../testcerts/c1.p12", "c1.ltu.arrowhead.eu",
+		"./cardemoconsumer.p12", "cardemoconsumer.c1.ltu.arrowhead.eu", "cardemoconsumer", san, "123456",
 	)
 	assert.Nil(t, err)
 
@@ -34,8 +34,8 @@ func TestSecurityOpenSSLGetPublicKey(t *testing.T) {
 	certManager := CreateKeytoolCertManager()
 	err := certManager.CreateSystemKeystore(
 		"../testcerts/master.p12", "arrowhead.eu",
-		"../testcerts/cloud1.p12", "cloud1.ltu.arrowhead.eu",
-		"./cardemoconsumer.p12", "cardemoconsumer.cloud1.ltu.arrowhead.eu",
+		"../testcerts/c1.p12", "c1.ltu.arrowhead.eu",
+		"./cardemoconsumer.p12", "cardemoconsumer.c1.ltu.arrowhead.eu",
 		"cardemoconsumer", san, "123456",
 	)
 

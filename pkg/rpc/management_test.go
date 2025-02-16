@@ -75,8 +75,8 @@ func TestRPCMgmtAddRemoveSystem(t *testing.T) {
 	certManager := openssl.CreateOpenSSLCertManager()
 	err = certManager.CreateSystemKeystore(
 		"../security/testcerts/master.p12", "arrowhead.eu",
-		"../security/testcerts/cloud1.p12", "cloud1.ltu.arrowhead.eu",
-		"./testconsumer.p12", "testconsumer.cloud1.ltu.arrowhead.eu",
+		"../security/testcerts/c1.p12", "c1.ltu.arrowhead.eu",
+		"./testconsumer.p12", "testconsumer.c1.ltu.arrowhead.eu",
 		"testconsumer", san, "123456",
 	)
 
@@ -130,8 +130,8 @@ func TestRPCMgmtAddRemoveService(t *testing.T) {
 	certManager := openssl.CreateOpenSSLCertManager()
 	err = certManager.CreateSystemKeystore(
 		"../security/testcerts/master.p12", "arrowhead.eu",
-		"../security/testcerts/cloud1.p12", "cloud1.ltu.arrowhead.eu",
-		"./testconsumer.p12", "testconsumer.cloud1.ltu.arrowhead.eu",
+		"../security/testcerts/c1.p12", "c1.ltu.arrowhead.eu",
+		"./testconsumer.p12", "testconsumer.c1.ltu.arrowhead.eu",
 		"testconsumer", san, "123456",
 	)
 
@@ -192,8 +192,8 @@ func TestRPCMgmtAddRemoveAuthorization(t *testing.T) {
 	certManager := openssl.CreateOpenSSLCertManager()
 	err = certManager.CreateSystemKeystore(
 		"../security/testcerts/master.p12", "arrowhead.eu",
-		"../security/testcerts/cloud1.p12", "cloud1.ltu.arrowhead.eu",
-		"./testprovider.p12", "testprovider.cloud1.ltu.arrowhead.eu",
+		"../security/testcerts/c1.p12", "c1.ltu.arrowhead.eu",
+		"./testprovider.p12", "testprovider.c1.ltu.arrowhead.eu",
 		"testprovider", san, "123456",
 	)
 
@@ -227,8 +227,8 @@ func TestRPCMgmtAddRemoveAuthorization(t *testing.T) {
 
 	err = certManager.CreateSystemKeystore(
 		"../security/testcerts/master.p12", "arrowhead.eu",
-		"../security/testcerts/cloud1.p12", "cloud1.ltu.arrowhead.eu",
-		"./testconsumer.p12", "testconsumer.cloud1.ltu.arrowhead.eu",
+		"../security/testcerts/c1.p12", "c1.ltu.arrowhead.eu",
+		"./testconsumer.p12", "testconsumer.c1.ltu.arrowhead.eu",
 		"testconsumer", san, "123456",
 	)
 

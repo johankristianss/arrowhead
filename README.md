@@ -11,11 +11,11 @@ arrowhead systems register --name carprovider --address localhost --port 8880
 ```console
 INFO[0000] Using openssl as certificate manager
 Certificate request self-signature ok
-subject=CN = carprovider.cloud1.ltu.arrowhead.eu
+subject=CN = carprovider.c1.ltu.arrowhead.eu
 INFO[0000] System registered successfully, certificate stored in ./carprovider.p12 and ./carprovider.pub, config file stored in ./carprovider.env
 ```
 
-The command will register a new system at the Arrowhead Service Registry core service, and generate a corresponding PKCS#12 certificate with CN *carprovider.cloud1.ltu.arrowhead.eu*.
+The command will register a new system at the Arrowhead Service Registry core service, and generate a corresponding PKCS#12 certificate with CN *carprovider.c1.ltu.arrowhead.eu*.
 
 ```console
 ls
