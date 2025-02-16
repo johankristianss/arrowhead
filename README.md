@@ -101,7 +101,7 @@ We are going to:
    - The `carconsumer` will use the Arrowhead orchestration core service to find the endpoint of the `carprovider`.
    - It will then send an HTTP request to interact with it.
 
-## 1. Register a car provider
+## Register a car provider
 ```console
 mkdir carprovider;cd carprovider
 ```
