@@ -35,7 +35,7 @@ docker-compose up
 
 ### 4. Configuration
 All configurations are managed using environment variables.
-Create a file called arrowhead.env and add the following content, replacing *XXXXX* with the actual path to your Arrowhead core services certificates:
+Create a file called `arrowhead.env` and add the following content, replacing **XXXXX** with the actual path to your Arrowhead core services certificates:
 
 ```console
 export ARROWHEAD_VERBOSE="true"
@@ -60,7 +60,7 @@ export ARROWHEAD_ORCHESTRATOR_HOST="localhost"
 export ARROWHEAD_ORCHESTRATOR_PORT="8441"
 ```
 
-Remember to source the arrowhead.env file to load all configurations:
+Remember to source the `arrowhead.env` file to load all configurations:
 ```console
 source arrowhead.env
 ```
@@ -86,12 +86,12 @@ arrowhead systems ls
 # Tutorial: Developing Car Provider and Consumer Services 
 We are going to:
 
-1. Register the `carprovider` system using the **arrowhead** CLI.
-   - The CLI will automatically generate a **PKCS#12 certificate**.
+1. Register the `carprovider` system using the *arrowhead* CLI.
+   - The CLI will automatically generate a PKCS#12 certificate.
 
-2. Register the `carconsumer` system using the **arrowhead** CLI.
+2. Register the `carconsumer` system using the *arrowhead* CLI.
 
-3. Register the `create-car` service to the `carprovider` and **Register the `get-car` service** to the `carprovider`.
+3. Register the `create-car` service to the `carprovider` and register the `get-car` service to the `carprovider`.
 
 4. Add authorization rules allowing the `carconsumer` to access the `carprovider` services.
 
@@ -240,7 +240,7 @@ arrowhead auths ls
 ╰────┴──────────────────────┴──────────────────────┴────────────────────┴──────────────────╯
 ```
 
-## Orchestrations
+## Optional: Orchestrations
 Let's try to find the carprovider. Note that the we must use the certificate keystore (carconsumer.p12) of the carconsumer to run the command below.
 
 ```console
@@ -278,7 +278,7 @@ arrowhead orchestrate --system carconsumer --address localhost --port 8881 --key
 ```
 
 ## Provider implementation
-Create a file the provider directory called **provider.go**.
+Create a file the provider directory called `provider.go`.
 ```go
 package main
 
@@ -350,7 +350,7 @@ func main() {
 ```
 
 ## Consumer implementation
-Paste this source code to a file called **consumer.go** in the consumer directory.
+Paste this source code to a file called `consumer.go` in the consumer directory.
 ```go
 package main
 
@@ -402,7 +402,7 @@ func main() {
 ```
 
 ## Run the demo
-Open a new terminal window and type to start the **carprovider**:
+Open a new terminal window and type to start the *carprovider*:
 
 ```console
 cd provider
@@ -410,7 +410,7 @@ source carprovider.env
 go run provider.go
 ```
 
-Open an another terminal and start the consumer:
+Open an another terminal and start the *carconsumer*:
 
 ```console
 cd consumer
