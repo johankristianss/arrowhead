@@ -86,20 +86,20 @@ arrowhead systems ls
 # Tutorial: Developing Car Provider and Consumer Services 
 We are going to:
 
-1. **Register the `carprovider` system** using the **arrowhead** CLI.
+1. Register the `carprovider` system using the **arrowhead** CLI.
    - The CLI will automatically generate a **PKCS#12 certificate**.
 
-2. **Register the `carconsumer` system** using the **arrowhead** CLI.
+2. Register the `carconsumer` system using the **arrowhead** CLI.
 
-3. **Register the `create-car` service** to the `carprovider` and **Register the `get-car` service** to the `carprovider`.
+3. Register the `create-car` service to the `carprovider` and **Register the `get-car` service** to the `carprovider`.
 
-4. **Add authorization rules** allowing the `carconsumer` to access the `carprovider` services.
+4. Add authorization rules allowing the `carconsumer` to access the `carprovider` services.
 
-5. **Implement the `carprovider` and `carconsumer` applications**.
+5. Implement the `carprovider` and `carconsumer` applications.
 
-5. **Start the `carprovider` and `carconsumer`**.
-   - The `carconsumer` will use the **Arrowhead orchestration core service** to find the endpoint of the `carprovider`.
-   - It will then send an **HTTP request** to interact with it.
+5. Start the `carprovider` and `carconsumer`.
+   - The `carconsumer` will use the Arrowhead orchestration core service to find the endpoint of the `carprovider`.
+   - It will then send an HTTP request to interact with it.
 
 ## 1. Register a car provider
 ```console
