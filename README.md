@@ -1,6 +1,107 @@
 # Introduction
+This repository provides an Arrowhead Golang SDK along with a CLI tool that simplifies the management of Arrowhead systems and facilitates the development of Arrowhead applications.
 
-## Create a car provider 
+This document contains a short tutorial on how to develop and deploy car provider and consumer services, similar to the Java-based example in the guide:
+[Arrowhead SOS Examples - Demo Car](https://github.com/arrowhead-f/sos-examples-spring/tree/master/demo-car).
+
+It should be possible to **set up and run the car provider and consumer services** simply by executing the commands in a terminal.
+
+---
+
+# Installation
+
+### 1. Install Golang
+Download and install [Golang](https://go.dev/dl/).
+
+### 2. Clone and Build the SDK
+Clone this repository and build the **arrowhead** CLI tool:
+
+```sh
+git clone https://github.com/your-repo/arrowhead-golang-sdk.git
+cd arrowhead-golang-sdk
+make
+sudo make install
+```
+
+### 3. Deploy Arrowhead core services
+Follow the setup instructions in [https://github.com/johankristianss/arrowhead-core-docker](https://github.com/johankristianss/arrowhead-core-docker) repository.
+Note: You must modify /etc/hosts as described in the instructions.
+
+```console
+git clone https://github.com/johankristianss/arrowhead-core-docker.git
+cd arrowhead-core-docker
+docker-compose up
+```
+
+### 4. Configuration
+All configurations are managed using environment variables.
+Create a file called arrowhead.env and add the following content, replacing *XXXXX* with the actual path to your Arrowhead core services certificates:
+
+```console
+export ARROWHEAD_VERBOSE="true"
+export ARROWHEAD_ASCII="true"
+
+# Certificates configuration
+export ARROWHEAD_KEYSTORE_PASSWORD="123456"
+export ARROWHEAD_ROOT_KEYSTORE="/XXXXX/arrowhead-core-docker/c1/certificates/master.p12"
+export ARROWHEAD_ROOT_KEYSTORE_ALIAS="arrowhead.eu"
+export ARROWHEAD_CLOUD_KEYSTORE="/XXXXX/arrowhead-core-docker/c1/certificates/cloud1.p12"
+export ARROWHEAD_CLOUD_KEYSTORE_ALIAS="cloud1.ltu.arrowhead.eu"
+export ARROWHEAD_SYSOPS_KEYSTORE="/XXXXX/arrowhead-core-docker/c1/certificates/sysop.p12"
+export ARROWHEAD_TRUSTSTORE="/XXXXX/arrowhead-core-docker/c1/certificates/truststore.pem"
+
+# Arrowhead Core Services configuration
+export ARROWHEAD_TLS="true"
+export ARROWHEAD_AUTHORIZATION_HOST="localhost"
+export ARROWHEAD_AUTHORIZATION_PORT="8445"
+export ARROWHEAD_SERVICEREGISTRY_HOST="localhost"
+export ARROWHEAD_SERVICEREGISTRY_PORT="8443"
+export ARROWHEAD_ORCHESTRATOR_HOST="localhost"
+export ARROWHEAD_ORCHESTRATOR_PORT="8441"
+```
+
+Remember to source the arrowhead.env file to load all configurations:
+```console
+source arrowhead.env
+```
+
+Try the Arrowhead CLI tool to see if it works:
+```console
+arrowhead systems ls
+```
+
+```console
+╭─────┬─────────────────┬────────────────────┬──────╮
+│ ID  │ SYSTEM NAME     │ ADDRESS            │ PORT │
+├─────┼─────────────────┼────────────────────┼──────┤
+│ 1   │ serviceregistry │ c1-serviceregistry │ 8443 │
+│ 2   │ gateway         │ c1-gateway         │ 8453 │
+│ 3   │ eventhandler    │ c1-eventhandler    │ 8455 │
+│ 4   │ orchestrator    │ c1-orchestrator    │ 8441 │
+│ 5   │ authorization   │ c1-authorization   │ 8445 │
+│ 6   │ gatekeeper      │ c1-gatekeeper      │ 8449 │
+╰─────┴─────────────────┴────────────────────┴──────╯
+```
+
+# Tutorial: Developing Car Provider and Consumer Services 
+We are going to:
+
+1. **Register the `carprovider` system** using the **arrowhead** CLI.
+   - The CLI will automatically generate a **PKCS#12 certificate**.
+
+2. **Register the `carconsumer` system** using the **arrowhead** CLI.
+
+3. **Register the `create-car` service** to the `carprovider` and **Register the `get-car` service** to the `carprovider`.
+
+4. **Add authorization rules** allowing the `carconsumer` to access the `carprovider` services.
+
+5. **Implement the `carprovider` and `carconsumer` applications**.
+
+5. **Start the `carprovider` and `carconsumer`**.
+   - The `carconsumer` will use the **Arrowhead orchestration core service** to find the endpoint of the `carprovider`.
+   - It will then send an **HTTP request** to interact with it.
+
+## 1. Register a car provider
 ```console
 mkdir carprovider;cd carprovider
 ```
@@ -55,7 +156,7 @@ arrowhead systems ls --filter car
 ╰─────┴─────────────────┴───────────┴──────╯
 ```
 
-## Create a car consumer 
+## Register a car consumer
 ```console
 cd ..;mkdir carconsumer;cd carconsumer
 ```
@@ -90,7 +191,7 @@ INFO[0000] Service registered                            HTTPMethod=POST Service
 
 Also, register a function to fetch cars.
 ```console
-arrowhead services register --system carprovider --definition get-car --uri /carfactory -m GET 
+arrowhead services register --system carprovider --definition get-car --uri /carfactory -m GET
 ```
 ```console
 INFO[0000] Service registered                            HTTPMethod=GET ServiceDefinition=get-car ServiceURI=/carfactory SystemName=carprovider
@@ -128,7 +229,7 @@ NFO[0000] Authorization added                           AuthID=15
 The *carconsumer* can now access the *carprovider*. List list all authorization rules.
 
 ```console
-arrowhead auths ls 
+arrowhead auths ls
 ```
 ```console
 ╭────┬──────────────────────┬──────────────────────┬────────────────────┬──────────────────╮
@@ -177,4 +278,144 @@ arrowhead orchestrate --system carconsumer --address localhost --port 8881 --key
 ```
 
 ## Provider implementation
+Create a file the provider directory called **provider.go**.
+```go
+package main
 
+import (
+	"encoding/json"
+	"fmt"
+
+	arrowhead "github.com/johankristianss/arrowhead/pkg/arrowhead"
+	"github.com/johankristianss/arrowhead/pkg/rpc"
+)
+
+type Car struct {
+	Brand string `json:"brand"`
+	Color string `json:"color"`
+}
+
+type InMemoryCarRepository struct {
+	cars []Car
+}
+
+type CreateCarService struct {
+	inMemoryCarRepository *InMemoryCarRepository
+}
+
+func (s *CreateCarService) HandleRequest(params *arrowhead.Params) ([]byte, error) {
+	fmt.Println("CreateCarService called, creating car")
+	car := Car{}
+	err := json.Unmarshal(params.Payload, &car)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println("Car: ", car)
+	s.inMemoryCarRepository.cars = append(s.inMemoryCarRepository.cars, car)
+	return nil, nil
+}
+
+type GetCarService struct {
+	inMemoryCarRepository *InMemoryCarRepository
+}
+
+func (s *GetCarService) HandleRequest(params *arrowhead.Params) ([]byte, error) {
+	carsJSON, err := json.Marshal(s.inMemoryCarRepository.cars)
+	if err != nil {
+		return nil, err
+	}
+	return carsJSON, nil
+}
+
+func checkError(err error) {
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+func main() {
+	framework, err := arrowhead.CreateFramework()
+	checkError(err)
+
+	inMemoryCarRepository := &InMemoryCarRepository{}
+	createCarService := &CreateCarService{inMemoryCarRepository: inMemoryCarRepository}
+	getCarService := &GetCarService{inMemoryCarRepository: inMemoryCarRepository}
+
+	framework.HandleService(createCarService, rpc.POST, "create-car", "/carfactory")
+	framework.HandleService(getCarService, rpc.GET, "get-car", "/carfactory")
+
+	err = framework.ServeForever()
+	checkError(err)
+}
+```
+
+## Consumer implementation
+Paste this source code to a file called **consumer.go** in the consumer directory.
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+
+	arrowhead "github.com/johankristianss/arrowhead/pkg/arrowhead"
+)
+
+type Car struct {
+	Brand string `json:"brand"`
+	Color string `json:"color"`
+}
+
+func checkError(err error) {
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+func main() {
+	framework, err := arrowhead.CreateFramework()
+	checkError(err)
+
+	// Buiid the request
+	params := arrowhead.EmptyParams()
+	car := Car{Brand: "Toyota", Color: "Red"}
+	carJSON, err := json.Marshal(car)
+	checkError(err)
+	params.Payload = carJSON
+
+	// Send the request
+	res, err := framework.SendRequest("create-car", params)
+	checkError(err)
+
+	// Fetch cars
+	res, err = framework.SendRequest("get-car", arrowhead.EmptyParams())
+	checkError(err)
+
+	// Print the response
+	cars := []Car{}
+	err = json.Unmarshal(res, &cars)
+	checkError(err)
+	for _, car := range cars {
+		fmt.Println(car.Brand, car.Color)
+	}
+}
+```
+
+## Run the demo
+Open a new terminal window and type to start the **carprovider**:
+
+```console
+cd provider
+source carprovider.env
+go run provider.go
+```
+
+Open an another terminal and start the consumer:
+
+```console
+cd consumer
+source carconsumer.env
+go run consumer.go
+```
+
+🎉 Congratulations! You have successfully implemented and deployed Arrowhead-based car provider and consumer services in Golang! 🚀
