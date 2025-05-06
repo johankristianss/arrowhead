@@ -1,0 +1,13 @@
+docker exec -it 151dde36d164 bash
+
+mysql -u root -p
+The password is root
+
+use arrowhead;
+
+select * from service_definition;
+select * from arrowhead.system_;
+show tables;
+describe service_definition;
+show tables;
+
