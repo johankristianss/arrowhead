@@ -17,7 +17,7 @@ Download and install [Golang](https://go.dev/dl/).
 Clone this repository and build the **arrowhead** CLI tool:
 
 ```sh
-git clone https://github.com/your-repo/arrowhead-golang-sdk.git
+git clone https://github.com/your-repo/arrowhead.git
 cd arrowhead-golang-sdk
 make
 sudo make install
@@ -45,8 +45,8 @@ export ARROWHEAD_ASCII="true"
 export ARROWHEAD_KEYSTORE_PASSWORD="123456"
 export ARROWHEAD_ROOT_KEYSTORE="/XXXXX/arrowhead-core-docker/c1/certificates/master.p12"
 export ARROWHEAD_ROOT_KEYSTORE_ALIAS="arrowhead.eu"
-export ARROWHEAD_CLOUD_KEYSTORE="/XXXXX/arrowhead-core-docker/c1/certificates/cloud1.p12"
-export ARROWHEAD_CLOUD_KEYSTORE_ALIAS="cloud1.ltu.arrowhead.eu"
+export ARROWHEAD_CLOUD_KEYSTORE="/XXXXX/arrowhead-core-docker/c1/certificates/c1.p12"
+export ARROWHEAD_CLOUD_KEYSTORE_ALIAS="c1.ltu.arrowhead.eu"
 export ARROWHEAD_SYSOPS_KEYSTORE="/XXXXX/arrowhead-core-docker/c1/certificates/sysop.p12"
 export ARROWHEAD_TRUSTSTORE="/XXXXX/arrowhead-core-docker/c1/certificates/truststore.pem"
 
@@ -405,7 +405,7 @@ func main() {
 Open a new terminal window and type to start the *carprovider*:
 
 ```console
-cd provider
+cd carprovider
 source carprovider.env
 go run provider.go
 ```
@@ -413,7 +413,7 @@ go run provider.go
 Open an another terminal and start the *carconsumer*:
 
 ```console
-cd consumer
+cd carconsumer
 source carconsumer.env
 go run consumer.go
 ```
